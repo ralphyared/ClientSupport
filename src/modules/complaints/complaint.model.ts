@@ -1,5 +1,6 @@
 import { object } from "joi";
 import mongoose from "mongoose";
+import { ComplaintStatus } from "../../global/enums.js";
 
 const Schema = mongoose.Schema;
 
@@ -9,10 +10,11 @@ const complaintSchema = new Schema(
     body: String,
     status: {
       type: String,
-      enum: ["PENDING", "INPROGRESS", "RESOLVED", "REJECTED"],
-      default: "PENDING",
+      enum: ComplaintStatus,
+      default: ComplaintStatus.PENDING,
     },
     categoryId: [{ type: Schema.Types.ObjectId, ref: "Category" }],
+    createdBy: Schema.Types.ObjectId,
   },
 
   { timestamps: true }
