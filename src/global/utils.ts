@@ -48,22 +48,14 @@ export const sendOtpByEmail = async (email: string, otp: number) => {
   }
 };
 
-export const notifyUserOfStatusUpdate = async (io: Server) => {
+export const socketInit = async (io: Server) => {
   io.on("connection", (socket: Socket) => {
-    socket.on(
-      "updateComplaintStatus",
-      async (complaintId: string, newStatus: string) => {
-        try {
-          const updatedComplaint = await getComplaintById(complaintId);
-          const userId = updatedComplaint?.createdBy?.toString();
-          io.to(userId!).emit("updateComplaintStatus", {
-            complaintId,
-            newStatus,
-          });
-        } catch (err) {
-          throw err;
-        }
+    socket.on("userLogin", async (userId: string) => {
+      try {
+        socket.join(userId);
+      } catch (err) {
+        throw err;
       }
-    );
+    });
   });
 };

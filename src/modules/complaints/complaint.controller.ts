@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
 import * as service from "./complaint.service.js";
-import { notifyUserOfStatusUpdate } from "../../global/utils.js";
 
 const submitComplaint = async (
   req: Request,
@@ -82,15 +81,8 @@ const updateComplaintStatus = async (
     const { status } = req.body;
     const io = req.app.get("io");
 
-    const updatedComplaint = await service.updateComplaintStatus(
-      complaintId,
-      status
-    );
-    const userId = updatedComplaint.createdBy;
-    io.to(userId).emit("updateComplaintStatus", {
-      complaintId,
-      status,
-    });
+    await service.updateComplaintStatus(complaintId, status, io);
+
     res.end();
   } catch (err) {
     next(err);

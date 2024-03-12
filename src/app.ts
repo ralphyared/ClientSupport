@@ -9,7 +9,7 @@ import userRoutes from "./modules/users/user.routes.js";
 import categoryRoutes from "./modules/categories/category.routes.js";
 import complaintRoutes from "./modules/complaints/complaint.routes.js";
 import { Server } from "socket.io";
-import { notifyUserOfStatusUpdate } from "./global/utils.js";
+import { socketInit } from "./global/utils.js";
 
 const app = express();
 
@@ -17,7 +17,7 @@ const server = http.createServer(app);
 
 const io = new Server(server);
 
-notifyUserOfStatusUpdate(io);
+socketInit(io);
 
 app.set("io", io);
 

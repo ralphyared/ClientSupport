@@ -4,7 +4,7 @@ import * as service from "./user.service.js";
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = await service.signup(
+    const result = await service.signup(
       req.body.firstName,
       req.body.lastName,
       req.body.email,
@@ -12,7 +12,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       req.body.isVIP,
       req.body.isAdmin
     );
-    res.send(token);
+    res.send(result);
   } catch (err) {
     next(err);
   }
@@ -20,8 +20,8 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = await service.login(req.body.email, req.body.password);
-    res.send(token);
+    const result = await service.login(req.body.email, req.body.password);
+    res.send(result);
   } catch (err) {
     next(err);
   }

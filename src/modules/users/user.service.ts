@@ -43,10 +43,11 @@ const signup = async (
     isVIP: isVIP,
   });
   const savedUser = await user.save();
+  const userId = savedUser._id;
 
   const token = await signUserJwt(savedUser);
 
-  return { token };
+  return { token, userId };
 };
 
 const login = async (email: string, password: string) => {
@@ -68,10 +69,10 @@ const login = async (email: string, password: string) => {
 
     throw err;
   }
-
+  const userId = user._id;
   const token = await signUserJwt(user);
 
-  return { token };
+  return { token, userId };
 };
 
 const signUserJwt = async (user: any) => {

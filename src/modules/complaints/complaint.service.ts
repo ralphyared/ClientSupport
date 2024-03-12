@@ -69,7 +69,11 @@ const deleteUserComplaint = async (userId: String, complaintId: String) => {
   return Complaint.deleteOne({ _id: complaintId });
 };
 
-const updateComplaintStatus = async (complaintId: String, status: string) => {
+const updateComplaintStatus = async (
+  complaintId: String,
+  status: string,
+  io: any
+) => {
   const complaint = await Complaint.findById(complaintId);
   if (!complaint) {
     const err = new CustomError(
@@ -79,7 +83,12 @@ const updateComplaintStatus = async (complaintId: String, status: string) => {
     throw err;
   }
   complaint.status = status.toUpperCase();
-  await complaint.save();
+  const updatedComplaint = await complaint.save();
+  const userId = updatedComplaint.createdBy;
+  io.to(userId).emit("complaintStatusChanged", {
+    complaintId,
+    status,
+  });
   return complaint;
 };
 
